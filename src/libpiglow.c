@@ -11,7 +11,7 @@
 #include "piglow.h"
 
 /* Values taken from SN3218 data sheet */
-int _gamma[32] = {
+int pi_gamma[32] = {
     0x00, 0x01, 0x02, 0x04, 0x06, 0x0A, 0x0D, 0x12,
     0x16, 0x1C, 0x21, 0x27, 0x2E, 0x35, 0x3D, 0x45,
     0x4E, 0x56, 0x60, 0x6A, 0x74, 0x7E, 0x8A, 0x95,
@@ -19,24 +19,24 @@ int _gamma[32] = {
 };
 
 /* Necessary as registers on chip cannot be read */
-char _enabledReg1 = 0x00;
-char _enabledReg2 = 0x00;
-char _enabledReg3 = 0x00;
+char pi_enabledReg1 = 0x00;
+char pi_enabledReg2 = 0x00;
+char pi_enabledReg3 = 0x00;
 
 /* File descriptor to /dev/i2c-x device */
-int _i2cDevice = -1;
+int pi_i2cDevice = -1;
 
 /* internal helper function to write bytes */
 int piglow_write(char reg, char value)
 {
-    if(_i2cDevice < 0)
+    if(pi_i2cDevice < 0)
     {
         fputs("PiGlow not initialised\n",stderr);
         return (-1);
     }
     else
     {
-        if(write(_i2cDevice, (char[2]){reg,value}, 2) != 2)
+        if(write(pi_i2cDevice, (char[2]){reg,value}, 2) != 2)
         {
             perror("Unable to write to PiGlow");
             return (-1);
@@ -53,11 +53,11 @@ int piglow_write(char reg, char value)
 int piglow_gamma(int index)
 {
     if(index < 0)
-        return (_gamma[0]);
+        return (pi_gamma[0]);
     else if(index > 31)
-        return (_gamma[31]);
+        return (pi_gamma[31]);
     else
-        return (_gamma[index]);
+        return (pi_gamma[index]);
 }
 
 
@@ -68,18 +68,18 @@ int piglow_init(int i2c_id)
     snprintf(filename,29, "/dev/i2c-%d", i2c_id);
 
     /* Open Device */
-    _i2cDevice = open(filename, O_RDWR);
-    if(_i2cDevice < 0)
+    pi_i2cDevice = open(filename, O_RDWR);
+    if(pi_i2cDevice < 0)
     {
         perror("Couldn't access PiGlow");
         return (-1);
     }
 
     /* Set I2C on device */
-    if(ioctl(_i2cDevice, I2C_SLAVE, 0x54) < 0)
+    if(ioctl(pi_i2cDevice, I2C_SLAVE, 0x54) < 0)
     {
         perror("Couldn't access PiGlow");
-        close(_i2cDevice);
+        close(pi_i2cDevice);
         return (-1);
     }
 
@@ -95,9 +95,9 @@ int piglow_init(int i2c_id)
 void piglow_reset(void)
 {
     /* Clear our local copy of the enable registers*/
-    _enabledReg1 = 0;
-    _enabledReg2 = 0;
-    _enabledReg3 = 0;
+    pi_enabledReg1 = 0;
+    pi_enabledReg2 = 0;
+    pi_enabledReg3 = 0;
 
     /* Write to the reset register */
     if(piglow_write(0x17, 0x01) != 0)
@@ -175,14 +175,14 @@ void piglow_set(enum led_arm arm, enum led_colour colour, int value)
     switch((reg-1) / 6)
     {
         case 0:
-            if(enabled) _enabledReg1 |= 1 << ((reg-1)%6);
-            else _enabledReg1 &= ~(1<<(reg-1)%6);
+            if(enabled) pi_enabledReg1 |= 1 << ((reg-1)%6);
+            else pi_enabledReg1 &= ~(1<<(reg-1)%6);
         case 1:
-            if(enabled) _enabledReg2 |= 1 << ((reg-1)%6);
-            else _enabledReg2 &= ~(1<<(reg-1)%6);
+            if(enabled) pi_enabledReg2 |= 1 << ((reg-1)%6);
+            else pi_enabledReg2 &= ~(1<<(reg-1)%6);
         case 2:
-            if(enabled) _enabledReg3 |= 1 << ((reg-1)%6);
-            else _enabledReg3 &= ~(1<<(reg-1)%6);
+            if(enabled) pi_enabledReg3 |= 1 << ((reg-1)%6);
+            else pi_enabledReg3 &= ~(1<<(reg-1)%6);
     }
 
     /* Write the PWM value */
@@ -196,9 +196,9 @@ void piglow_set(enum led_arm arm, enum led_colour colour, int value)
 void piglow_update(void)
 {
     /* Need to write all three enable registers */
-    if(piglow_write(0x13, _enabledReg1) != 0
-     ||piglow_write(0x14, _enabledReg2) != 0
-     ||piglow_write(0x15, _enabledReg3) != 0 )
+    if(piglow_write(0x13, pi_enabledReg1) != 0
+     ||piglow_write(0x14, pi_enabledReg2) != 0
+     ||piglow_write(0x15, pi_enabledReg3) != 0 )
     {
         fputs("Couldn't enable LEDs\n", stderr);
     }
@@ -213,12 +213,12 @@ void piglow_update(void)
 void piglow_cleanup(void)
 {
     /* Only do this if we have a file descriptor */
-    if(!(_i2cDevice < 0))
+    if(!(pi_i2cDevice < 0))
     {
         /* Reset the PiGlow */
         piglow_reset();
 
         /* Close the File Descriptor */
-        close(_i2cDevice);
+        close(pi_i2cDevice);
     }
 }
