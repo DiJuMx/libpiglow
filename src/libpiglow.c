@@ -124,45 +124,45 @@ void piglow_set(enum led_arm arm, enum led_colour colour, int value)
     {
         switch(colour)
         {
-            case RED:   reg = 0x01; break;
-            case ORANGE:reg = 0x02; break;
-            case YELLOW:reg = 0x03; break;
-            case GREEN: reg = 0x04; break;
-            case BLUE:  reg = 0x0F; break;
-            case WHITE: reg = 0x0D; break;
+            case RED:   reg = (char) 0x01; break;
+            case ORANGE:reg = (char) 0x02; break;
+            case YELLOW:reg = (char) 0x03; break;
+            case GREEN: reg = (char) 0x04; break;
+            case BLUE:  reg = (char) 0x0F; break;
+            case WHITE: reg = (char) 0x0D; break;
             default:
                 fputs("Invalid Colour\n", stderr);
-                reg = 0xFF;
+                reg = (char) 0xFF;
         }
     }
     else if(arm == TOP)
     {
         switch(colour)
         {
-            case RED:   reg = 0x07; break;
-            case ORANGE:reg = 0x08; break;
-            case YELLOW:reg = 0x09; break;
-            case GREEN: reg = 0x06; break;
-            case BLUE:  reg = 0x05; break;
-            case WHITE: reg = 0x0A; break;
+            case RED:   reg = (char) 0x07; break;
+            case ORANGE:reg = (char) 0x08; break;
+            case YELLOW:reg = (char) 0x09; break;
+            case GREEN: reg = (char) 0x06; break;
+            case BLUE:  reg = (char) 0x05; break;
+            case WHITE: reg = (char) 0x0A; break;
             default:
                 fputs("Invalid Colour\n", stderr);
-                reg = 0xFF;
+                reg = (char) 0xFF;
         }
     }
     else if(arm == RIGHT)
     {
         switch(colour)
         {
-            case RED:   reg = 0x12; break;
-            case ORANGE:reg = 0x11; break;
-            case YELLOW:reg = 0x10; break;
-            case GREEN: reg = 0x0E; break;
-            case BLUE:  reg = 0x0C; break;
-            case WHITE: reg = 0x0B; break;
+            case RED:   reg = (char) 0x12; break;
+            case ORANGE:reg = (char) 0x11; break;
+            case YELLOW:reg = (char) 0x10; break;
+            case GREEN: reg = (char) 0x0E; break;
+            case BLUE:  reg = (char) 0x0C; break;
+            case WHITE: reg = (char) 0x0B; break;
             default:
                 fputs("Invalid Colour\n", stderr);
-                reg = 0xFF;
+                reg = (char) 0xFF;
         }
     }
     else
