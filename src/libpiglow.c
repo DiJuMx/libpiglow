@@ -11,7 +11,7 @@
 #include "piglow.h"
 
 /* Values taken from SN3218 data sheet */
-int pi_gamma[32] = {
+static int pi_gamma[32] = {
     0x00, 0x01, 0x02, 0x04, 0x06, 0x0A, 0x0D, 0x12,
     0x16, 0x1C, 0x21, 0x27, 0x2E, 0x35, 0x3D, 0x45,
     0x4E, 0x56, 0x60, 0x6A, 0x74, 0x7E, 0x8A, 0x95,
@@ -19,15 +19,15 @@ int pi_gamma[32] = {
 };
 
 /* Necessary as registers on chip cannot be read */
-char pi_enabledReg1 = 0x00;
-char pi_enabledReg2 = 0x00;
-char pi_enabledReg3 = 0x00;
+static char pi_enabledReg1 = 0x00;
+static char pi_enabledReg2 = 0x00;
+static char pi_enabledReg3 = 0x00;
 
 /* File descriptor to /dev/i2c-x device */
-int pi_i2cDevice = -1;
+static int pi_i2cDevice = -1;
 
 /* internal helper function to write bytes */
-int piglow_write(char reg, char value)
+static int piglow_write(char reg, char value)
 {
     if(pi_i2cDevice < 0)
     {
