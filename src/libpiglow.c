@@ -86,9 +86,6 @@ int piglow_init(int i2c_id)
     /* Clear the registers on the PiGlow */
     piglow_reset();
 
-    /* Enable the piglow */
-    piglow_write(0x00, 0x01);
-
     return (0);
 }
 
@@ -104,6 +101,9 @@ void piglow_reset(void)
     {
         fputs("Couldn't reset PiGlow\n",stderr);
     }
+
+    /* Enable the piglow */
+    piglow_write(0x00, 0x01);
 }
 
 void piglow_set(enum led_arm arm, enum led_colour colour, int value)
