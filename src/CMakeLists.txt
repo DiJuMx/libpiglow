@@ -1,4 +1,4 @@
-set(CMAKE_C_FLAGS "-Wall -Wpedantic")
+set(CMAKE_C_FLAGS "-Wall -pedantic")
 
 add_library(piglow SHARED libpiglow.c)
 
