@@ -177,12 +177,15 @@ void piglow_set(enum led_arm arm, enum led_colour colour, int value)
         case 0:
             if(enabled) pi_enabledReg1 |= 1 << ((reg-1)%6);
             else pi_enabledReg1 &= ~(1<<(reg-1)%6);
+            break;
         case 1:
             if(enabled) pi_enabledReg2 |= 1 << ((reg-1)%6);
             else pi_enabledReg2 &= ~(1<<(reg-1)%6);
+            break;
         case 2:
             if(enabled) pi_enabledReg3 |= 1 << ((reg-1)%6);
             else pi_enabledReg3 &= ~(1<<(reg-1)%6);
+            break;
     }
 
     /* Write the PWM value */
