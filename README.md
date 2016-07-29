@@ -28,7 +28,7 @@ Navigate to the build directory and run `make`.
 Install
 -------
 
-Navigate to the build directory and run `sud make install`. `sudo` is required as the files are installed into the `/usr/local` directory.
+Navigate to the build directory and run `sudo make install`. `sudo` is required as the files are installed into the `/usr/local` directory.
 
 ```
  $ cd ./build # Assuming you are in the root directory
